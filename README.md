@@ -18,7 +18,7 @@ https://www.instagram.com/p/CS4JRtonRD7/
 		local arc = util.file_exists(_path.code.."toga") and include "toga/lib/togaarc" or arc
 		```
 	3. Select the edited script on norns to load
- 3. Download **toga.tosc** controller file and import to TouchOSC.
+ 3. Download **toga.tosc** controller file and import to TouchOSC (new version, not working with Mk1).
  4. Set up connections to norns:
 	1. Choose UDP
 	2. Look up norns IP address in **SYSTEM** -> **WIFI** and input to **Host** field
