@@ -24,8 +24,9 @@ https://www.instagram.com/p/CS4JRtonRD7/
 	2. Look up norns IP address in **SYSTEM** -> **WIFI** and input to **Host** field
 	3. Input 10111 to **Send Port**
 	4. Input 8002 to **Receive Port** (any unused port number should work)
-5. Run the TouchOSC controller (by clicking Play button)  and press the upper-right green button. The green button should light up and the controller should be running.
-6. (Optional) Adding default TouchOSC client address:
+5. Run the TouchOSC controller (by clicking Play button).
+6. Tap the upper-right green button to connect to norns. The green button should light up and the controller should be running.
+7. (Optional) Adding default TouchOSC client address:
 	1. Open **code/toga/lib/togagrid.lua** file
 	2. Find the line `-- UNCOMMENT to add default touchosc client`
 	3. Remove leading `--` in the line below, and edit the IP address in the line.
