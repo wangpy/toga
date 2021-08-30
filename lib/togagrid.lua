@@ -2,6 +2,7 @@
 --local grid = util.file_exists(_path.code.."midigrid") and include "midigrid/lib/mg_128" or grid
 
 local togagrid = {
+  device = nil, -- needed by cheat codes 2
   cols = 16,
   rows = 8,
   old_buffer = nil,
@@ -38,6 +39,7 @@ function togagrid:init()
   -- UNCOMMENT to add default touchosc client
   --table.insert(self.dest, {"192.168.0.123",8002})
 
+  self.device = self
   self.old_buffer = create_buffer(self.cols, self.rows)
   self.new_buffer = create_buffer(self.cols, self.rows)
   self:hook_osc_in()
