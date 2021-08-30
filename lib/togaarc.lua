@@ -144,7 +144,9 @@ end
 
 -- @static
 function togaarc.cleanup()
-  togaarc.old_cleanup()
+  if togaarc.old_cleanup then
+    togaarc.old_cleanup()
+  end
   if not togaarc.cleanup_done then
     togaarc:send_connected(nil, false)
     togaarc.cleanup_done = true

@@ -116,7 +116,9 @@ end
 
 -- @static
 function togagrid.cleanup()
-  togagrid.old_cleanup()
+  if togagrid.old_cleanup then
+    togagrid.old_cleanup()
+  end
   if not togagrid.cleanup_done then
     togagrid:send_connected(nil, false)
     togagrid.cleanup_done = true
