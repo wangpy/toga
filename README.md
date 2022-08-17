@@ -33,5 +33,12 @@ https://www.instagram.com/p/CS4JRtonRD7/
 	4. Open **code/toga/lib/togaarc.lua** file and repeat the step 2 and 3.
 	5. Reload the script on norns. Now **toga** will automatically connect to the TouchOSC controller when the script is loaded.
 
+## Orientation
+
+The orientation button says which round the grid should be oriented.
+Any change here only updates after clicking the connection button,
+so if you set or change the orientation on the grid, touch the connection
+button to register that.
+
 ## Forum
 https://llllllll.co/t/toga-touchosc-grid-and-arc-controller-for-monome-norns/47902

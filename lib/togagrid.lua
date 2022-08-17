@@ -12,7 +12,8 @@ local togagrid = {
   old_grid = nil,
   old_osc_in = nil,
   old_cleanup = nil,
-  key = nil -- key event callback
+  key = nil, -- key event callback
+  orientation = 0, -- As TouchOSC, clockwise from 0 = north
 }
 
 function togagrid:connect()
@@ -83,13 +84,13 @@ function togagrid.osc_in(path, args, from)
         table.insert(togagrid.dest, from)
         togagrid:refresh(true, from)
       end
+      local orientation_changed = togagrid:set_orientation(args[1])
       -- echo back anyway to update connection button value
       togagrid:send_connected(from, true)
       -- do not consume the event so togaarc can also add the new touchosc client.
     elseif string.starts(path, "/togagrid/") then
       i = tonumber(string.sub(path,11))
-      x = ((i-1) % 16) + 1
-      y = (i-1) // 16 + 1
+      x, y = togagrid:i_to_xy(i)
       z = args[1] // 1
       --print("togagrid_osc_in togagrid", i, x, y, z)
       if togagrid.key then
@@ -107,6 +108,55 @@ function togagrid.osc_in(path, args, from)
     -- invoking original osc.event callback
     togagrid.old_osc_in(path, args, from)
   end
+end
+
+function togagrid:set_orientation(orientation)
+  local changed = false
+  if orientation then
+    if self.orientation ~= orientation then
+      self.orientation = orientation
+      changed = true
+    end
+  end
+  if changed then
+    if orientation % 2 == 0 then
+      -- North or south
+      self.cols = 16
+      self.rows = 8
+    else
+      -- East or west
+      self.cols = 8
+      self.rows = 16
+    end
+    self.old_buffer = create_buffer(self.cols, self.rows)
+    self.new_buffer = create_buffer(self.cols, self.rows)
+    self:refresh(true)
+  end
+  return changed
+end
+
+function togagrid:i_to_xy(i)
+  local x, y
+  if togagrid.orientation == 0 then
+    -- North
+    x = ((i-1) % 16) + 1
+    y = (i-1) // 16 + 1
+  elseif togagrid.orientation == 1 then
+    -- East
+    x = (i-1) // 16 + 1
+    y = 16 - ((i-1) % 16)
+  elseif togagrid.orientation == 2 then
+    -- South
+    i = 129 - i
+    x = ((i-1) % 16) + 1
+    y = (i-1) // 16 + 1
+  else
+    -- West
+    i = 129 - i
+    x = (i-1) // 16 + 1
+    y = 16 - ((i-1) % 16)
+  end
+  return x, y
 end
 
 function togagrid:hook_osc_in()
@@ -190,7 +240,7 @@ end
 
 function togagrid:update_led(c, r, target_dest)
   local z = self.new_buffer[c][r]
-  local i = c + (r-1) * self.cols
+  local i = self:cr_to_i(c, r)
   local addr = string.format("/togagrid/%d", i)
   --print("togagrid osc.send", addr, z)
   for d, dest in pairs(self.dest) do
@@ -200,6 +250,26 @@ function togagrid:update_led(c, r, target_dest)
       osc.send(dest, addr, {z / 15.0})
     end
   end
+end
+
+function togagrid:cr_to_i(c, r)
+  local i
+  if togagrid.orientation == 0 then
+    -- North
+    i = c + (r-1) * self.cols
+  elseif togagrid.orientation == 1 then
+    -- East
+    i = c*16 - (r-1)
+  elseif togagrid.orientation == 2 then
+    -- Sound
+    i = c + (r-1) * self.cols
+    i = 129 - i
+  else
+    -- West
+    i = c*16 - (r-1)
+    i = 129 - i
+  end
+  return i
 end
 
 function togagrid:send_connected(target_dest, connected)
