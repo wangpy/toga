@@ -13,7 +13,7 @@ https://www.instagram.com/p/CS4JRtonRD7/
 		local grid = util.file_exists(_path.code.."toga") and include "toga/lib/togagrid" or grid
 		```
 		 - If the script is already edited to support **midigrid**, you can add the support on midigrid library script file: add the line above to line 1 in **code/midigrid/lib/midigrid.lua**. When no midigrid-supported device is connected, toga grid will be initialized.
-	2. Find occurence of "grid.connect()"  in the script code and insert the following line above:
+	2. Find occurence of "arc.connect()"  in the script code and insert the following line above:
 		```
 		local arc = util.file_exists(_path.code.."toga") and include "toga/lib/togaarc" or arc
 		```
